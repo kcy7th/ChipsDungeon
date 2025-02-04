@@ -3,6 +3,7 @@
 public class StartMenu
 {
     private Player player;
+    private Dungeon dungeon;
 
     public StartMenu()
     {
@@ -17,6 +18,7 @@ public class StartMenu
 
         // 플레이어 생성
         player = new Player(playerName, playerJob);
+        dungeon = new Dungeon();
     }
 
     private string ChooseJob()
@@ -53,6 +55,8 @@ public class StartMenu
         Console.WriteLine("1. 상태 보기");
         Console.WriteLine("2. 인벤토리");
         Console.WriteLine("3. 상점");
+        Console.WriteLine("4. 던전입장");
+        Console.WriteLine("5. 휴식하기");
         Console.WriteLine("\n원하는 메뉴를 선택해 주세요.");
         Console.Write(">> ");
 
@@ -69,6 +73,12 @@ public class StartMenu
             case "3":
                 ShowShop();
                 break;
+            case "4":
+                EnterDungeon();
+                break;
+            case "5":
+                Rest();
+                break;
             default:
                 Console.WriteLine("잘못된 입력입니다.");
                 break;
@@ -83,14 +93,13 @@ public class StartMenu
         if (choice == "0")
         {
             Console.Clear();
-            DisplayMenu();    // 메인 메뉴로 바로 돌아가기
+            DisplayMenu();
         }
     }
 
-
     private void ShowInventory()
     {
-        player.Inventory.ShowInventory();  // 중복된 ShowInventory 메서드 제거
+        player.Inventory.ShowInventory();
     }
 
     private void ShowShop()
@@ -99,8 +108,47 @@ public class StartMenu
         shop.ShowShop(player);
     }
 
-    private void ManageEquipment()
+    private void EnterDungeon()
     {
-        player.Inventory.ManageEquipment();
+        dungeon.EnterDungeon(player);
+    }
+
+    private void Rest()
+    {
+        Console.Clear();
+        Console.WriteLine("휴식하기");
+        Console.WriteLine("500 G 를 내면 체력을 회복할 수 있습니다.");
+        Console.WriteLine($"(보유 골드 : {player.Gold} G)\n");
+
+        Console.WriteLine("1. 휴식하기");
+        Console.WriteLine("0. 나가기");
+        Console.Write("\n원하시는 행동을 입력해주세요.\n>> ");
+
+        string choice = Console.ReadLine();
+        if (choice == "1")
+        {
+            if (player.Gold >= 500)
+            {
+                player.Gold -= 500;
+                player.Health = 100;
+                Console.WriteLine("휴식을 완료했습니다. 체력이 100으로 회복되었습니다!");
+            }
+            else
+            {
+                Console.WriteLine("Gold가 부족합니다.");
+            }
+            Console.ReadKey();
+            DisplayMenu();
+        }
+        else if (choice == "0")
+        {
+            DisplayMenu();
+        }
+        else
+        {
+            Console.WriteLine("잘못된 입력입니다.");
+            Console.ReadKey();
+            Rest();
+        }
     }
 }

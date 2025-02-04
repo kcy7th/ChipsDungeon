@@ -10,7 +10,7 @@ public class Player
     public int BaseDefense { get; set; }
     public int Health { get; set; }
     public int Gold { get; set; }
-    public Inventory Inventory { get; private set; }  // 인벤토리 추가
+    public Inventory Inventory { get; set; }
 
     private List<Item> purchasedItems;  // 구매한 아이템을 추적
 

@@ -9,23 +9,20 @@ public class Shop
     {
         shopItems = new List<Item>
         {
-            new Item("바삭한 갑옷", "방어력 +5", "튀김처럼 바삭하고 내구성이 뛰어난 갑옷입니다.", 1000),
-            new Item("감자껍질 갑옷", "방어력 +9", "단단한 감자 껍질로 만든 갑옷.", 2000),
-            new Item("스마일감튀 갑옷", "방어력 +15", "케찹이 묻어도 방어력은 완벽하다!", 3500),
-            new Item("썩은 감자", "공격력 +2", "감자의 쓴 맛을 느낄 수 있습니다.", 600),
-            new Item("감자칼", "공격력 +5", "뭐든 썰어버립니다. (아닐 수도)", 1500),
-            new Item("회오리감자칼", "공격력 +7", "회오리처럼 날카로운 칼입니다.", 2500),
-            new Item("황금 감자 창", "공격력 +10", "순금으로 된 전설의 창. 사실은 금이 아니라 흙일 지도...?", 3500)
+            new Item("바삭한 갑옷", "방어력 +5", "튀김처럼 바삭하고 내구성이 뛰어난 갑옷입니다.", 1000, p => p.BaseDefense += 5),
+            new Item("매운 감자튀김 세트", "공격력 +3, 일정 확률로 적에게 화상", "아주 맵습니다!", 1200, p => p.BaseAttack += 3),
+            new Item("감자튀김 방패", "방어력 +7", "바삭함과 방어력을 동시에!", 2000, p => p.BaseDefense += 7),
+            new Item("감자 망토", "방어력 +10", "포근한 감자로 만든 망토.", 3000, p => p.BaseDefense += 10),
+            new Item("전기 감자", "공격력 +5, 일정 확률 추가 타격", "전기가 찌릿찌릿 흐른다.", 2500, p => p.BaseAttack += 5),
+            new Item("썩은 감자의 저주", "공격력 +8, 하지만 체력 지속 감소", "위험하지만 강력한 힘.", 3500, p => { p.BaseAttack += 8; p.Health -= 5; }),
         };
     }
 
-    // 상점 메인
     public void ShowShop(Player player)
     {
         Console.Clear();
         Console.WriteLine("상점");
         Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.\n");
-
         Console.WriteLine($"[보유 골드]\n{player.Gold} G\n");
         Console.WriteLine("[아이템 목록]");
 
@@ -52,18 +49,16 @@ public class Shop
             default:
                 Console.WriteLine("잘못된 입력입니다.");
                 Console.ReadKey();
-                ShowShop(player);  // 오류 수정: ShowShop으로 돌아가도록 수정
+                ShowShop(player);
                 break;
         }
     }
 
-    // 아이템 구매 화면
     private void BuyItem(Player player)
     {
         Console.Clear();
         Console.WriteLine("상점 - 아이템 구매");
         Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.\n");
-
         Console.WriteLine("[보유 골드]");
         Console.WriteLine($"{player.Gold} G\n");
 
@@ -76,18 +71,16 @@ public class Shop
         }
 
         Console.WriteLine("\n0. 나가기");
-
         Console.Write("\n원하시는 행동을 입력해주세요.\n>> ");
         string choice = Console.ReadLine();
-        PurchaseItem(choice, player);  // 오류 수정: ShowShopItems -> PurchaseItem
+        PurchaseItem(choice, player);
     }
 
-    // 아이템 구매 처리
     private void PurchaseItem(string choice, Player player)
     {
         if (choice == "0")
         {
-            ShowShop(player);  // 오류 수정: ShowShop으로 돌아가도록 수정
+            ShowShop(player);
             return;
         }
 
@@ -95,7 +88,7 @@ public class Shop
         {
             Console.WriteLine("잘못된 입력입니다.");
             Console.ReadKey();
-            BuyItem(player);  // 오류 수정: BuyItem으로 돌아가도록 수정
+            BuyItem(player);
             return;
         }
 
@@ -105,16 +98,16 @@ public class Shop
         {
             Console.WriteLine("이미 구매한 아이템입니다.");
             Console.ReadKey();
-            BuyItem(player);  // 오류 수정: BuyItem으로 돌아가도록 수정
+            BuyItem(player);
             return;
         }
 
-        // 골드가 충분한지 확인
         if (player.Gold >= selectedItem.Price)
         {
             Console.WriteLine("구매를 완료했습니다.");
-            player.Gold -= selectedItem.Price;  // 골드 차감
-            player.AddItem(selectedItem);  // 아이템 추가
+            player.Gold -= selectedItem.Price;
+            player.AddItem(selectedItem);
+            selectedItem.SpecialEffect?.Invoke(player); // 특수 효과 적용
             Console.ReadKey();
         }
         else
@@ -123,6 +116,6 @@ public class Shop
             Console.ReadKey();
         }
 
-        BuyItem(player);  // 구매 후 다시 아이템 구매 화면을 보여줌
+        BuyItem(player);
     }
 }
