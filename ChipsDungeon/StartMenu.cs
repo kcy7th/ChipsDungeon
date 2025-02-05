@@ -21,6 +21,7 @@ public class StartMenu
         dungeon = new Dungeon();
     }
 
+    // 직업 선택
     private string ChooseJob()
     {
         Console.Clear();
@@ -43,10 +44,11 @@ public class StartMenu
             default:
                 Console.WriteLine("\n올바르지 않은 입력! 기본 직업 '전사'로 설정됩니다.");
                 Console.ReadKey();
-                return "전사";
+                return "전사";  // 기본 값 - 전사
         }
     }
 
+    // 메인 메뉴
     public void DisplayMenu()
     {
         Console.Clear();
@@ -85,6 +87,7 @@ public class StartMenu
         }
     }
 
+    // 1. 상태 보기
     private void ShowStatus()
     {
         player.ShowStatus();
@@ -97,22 +100,26 @@ public class StartMenu
         }
     }
 
+    // 2. 인벤토리
     private void ShowInventory()
     {
         player.Inventory.ShowInventory();
     }
 
+    // 3. 상점
     private void ShowShop()
     {
         Shop shop = new Shop();
         shop.ShowShop(player);
     }
 
+    // 4. 던전 입장
     private void EnterDungeon()
     {
         dungeon.EnterDungeon(player);
     }
 
+    // 5. 휴식하기
     private void Rest()
     {
         Console.Clear();

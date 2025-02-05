@@ -3,6 +3,7 @@ using System.Threading;
 
 public class Dungeon
 {
+    // 던전 정보 구조체
     private struct DungeonInfo
     {
         public string Name;
@@ -10,6 +11,7 @@ public class Dungeon
         public int BaseReward;
         public Monster Monster;
 
+        // 던전 초기화
         public DungeonInfo(string name, int recommendedDefense, int baseReward, Monster monster)
         {
             Name = name;
@@ -19,6 +21,7 @@ public class Dungeon
         }
     }
 
+    // 던전 정보 배열
     private DungeonInfo[] dungeons = new DungeonInfo[]
     {
         new DungeonInfo("바삭바삭 초원", 5, 1000, new Monster("바삭 슬라임", 30, 5)),
@@ -28,6 +31,7 @@ public class Dungeon
 
     private Random random = new Random();
 
+    // 던전 입장 후 선택하기
     public void EnterDungeon(Player player)
     {
         while (true)
@@ -63,6 +67,7 @@ public class Dungeon
         Console.WriteLine($"{dungeon.Name}에 입장합니다!\n");
         Thread.Sleep(1000);
 
+        // 전투 실패
         if (!Battle(player, dungeon.Monster))
         {
             Console.WriteLine("던전 실패!\n보상을 얻지 못했으며, 체력이 절반 감소했습니다.");
@@ -75,10 +80,12 @@ public class Dungeon
             return;
         }
 
-        // 성공 로직
+        // 전투 성공
+        // 체력 계산
         int playerDefense = player.BaseDefense + player.Inventory.GetEquipmentStats().defenseBonus;
         int playerAttack = player.BaseAttack + player.Inventory.GetEquipmentStats().attackBonus;
 
+        // 방어력에 따른 체력 계산
         int defenseDiff = dungeon.RecommendedDefense - playerDefense;
         int healthLossMin = 20 + (defenseDiff > 0 ? defenseDiff : defenseDiff);
         int healthLossMax = 35 + (defenseDiff > 0 ? defenseDiff : defenseDiff);
@@ -86,8 +93,9 @@ public class Dungeon
 
         int initialHealth = player.Health;
         player.Health -= healthLoss;
-        if (player.Health < 0) player.Health = 0;
+        if (player.Health < 0) player.Health = 0;  // 음수 방지
 
+        // 보상 금액 계산
         int bonusPercentage = random.Next(playerAttack, playerAttack * 2 + 1);
         int bonusGold = dungeon.BaseReward * bonusPercentage / 100;
         int totalGold = dungeon.BaseReward + bonusGold;
@@ -107,6 +115,7 @@ public class Dungeon
         while (Console.ReadLine() != "0") { }
     }
 
+    // 턴제 TRPG
     private bool Battle(Player player, Monster monster)
     {
         Console.WriteLine($"{monster.Name}이(가) 등장했습니다!\n");
@@ -127,6 +136,7 @@ public class Dungeon
             Thread.Sleep(1000);
             int damage = monster.Attack;
 
+            // 데미지 있는 몬스터
             if (monster.HasFireEffect)
             {
                 Console.WriteLine("불튀김 골렘의 불 데미지! 추가 피해를 입습니다!");

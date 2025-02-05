@@ -3,18 +3,22 @@ using System.Collections.Generic;
 
 public class Inventory
 {
+    // 아이템 저장 리스트
     private List<Item> items;
 
+    // 인벤토리 생성자
     public Inventory()
     {
         items = new List<Item>();
     }
 
+    // 아이템 추가 메서드
     public void AddItem(Item item)
     {
         items.Add(item);
     }
 
+    // 아이템에 따른 공격력, 방어력 계산
     public (int attackBonus, int defenseBonus) GetEquipmentStats()
     {
         int attackBonus = 0;
@@ -47,6 +51,7 @@ public class Inventory
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             Console.WriteLine("[아이템 목록]");
 
+            // 인벤토리 비어있을 시
             if (items.Count == 0)
             {
                 Console.WriteLine("보유 중인 아이템이 없습니다.\n");
@@ -81,6 +86,7 @@ public class Inventory
         }
     }
 
+    // 장착 관리 메서드
     public void ManageEquipment()
     {
         while (true)
@@ -96,6 +102,7 @@ public class Inventory
                 return;
             }
 
+            // 아이템 목록 표시
             for (int i = 0; i < items.Count; i++)
             {
                 string equipped = items[i].IsEquipped ? "[E] " : "";
@@ -122,6 +129,7 @@ public class Inventory
         }
     }
 
+    // 아이템 장착, 해제
     private void ToggleEquipment(int index)
     {
         items[index].IsEquipped = !items[index].IsEquipped;
@@ -130,6 +138,7 @@ public class Inventory
         Console.ReadKey();
     }
 
+    // 공격력, 방어력 추출
     private int ExtractStatValue(string effect)
     {
         string[] parts = effect.Split('+');

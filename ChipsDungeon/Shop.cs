@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 public class Shop
 {
+    // 아이템 목록
     private List<Item> shopItems;
 
+    // 판매 아이템 초기화
     public Shop()
     {
         shopItems = new List<Item>
@@ -18,6 +20,7 @@ public class Shop
         };
     }
 
+    // 상점 화면
     public void ShowShop(Player player)
     {
         Console.Clear();
@@ -26,10 +29,12 @@ public class Shop
         Console.WriteLine($"[보유 골드]\n{player.Gold} G\n");
         Console.WriteLine("[아이템 목록]");
 
+        // 판매 중인 아이템
         for (int i = 0; i < shopItems.Count; i++)
         {
             var item = shopItems[i];
-            string status = player.HasItem(item) ? "구매완료" : $"{item.Price} G";
+            // 구매 완료 시 '구매 완료'
+            string status = player.HasItem(item) ? "구매 완료" : $"{item.Price} G";
             Console.WriteLine($"- {item.Name} | {item.Effect} | {item.Description} | {status}");
         }
 
@@ -54,6 +59,7 @@ public class Shop
         }
     }
 
+    // 아이템 구매 화면
     private void BuyItem(Player player)
     {
         Console.Clear();
@@ -63,10 +69,11 @@ public class Shop
         Console.WriteLine($"{player.Gold} G\n");
 
         Console.WriteLine("[아이템 목록]");
+        // 판매된 아이템 목록
         for (int i = 0; i < shopItems.Count; i++)
         {
             var item = shopItems[i];
-            string status = player.HasItem(item) ? "구매완료" : $"{item.Price} G";
+            string status = player.HasItem(item) ? "구매 완료" : $"{item.Price} G";
             Console.WriteLine($"{i + 1}. {item.Name} | {item.Effect} | {item.Description} | {status}");
         }
 
@@ -76,6 +83,7 @@ public class Shop
         PurchaseItem(choice, player);
     }
 
+    // 아이템 구매 로직
     private void PurchaseItem(string choice, Player player)
     {
         if (choice == "0")
@@ -94,6 +102,7 @@ public class Shop
 
         Item selectedItem = shopItems[itemNumber - 1];
 
+        // 이미 소지한 아이템일 경우
         if (player.HasItem(selectedItem))
         {
             Console.WriteLine("이미 구매한 아이템입니다.");

@@ -11,9 +11,9 @@ public class Player
     public int Health { get; set; }
     public int Gold { get; set; }
     public Inventory Inventory { get; set; }
+    private List<Item> purchasedItems;  // 구매한 아이템
 
-    private List<Item> purchasedItems;  // 구매한 아이템을 추적
-
+    // 캐릭터 초기 속성
     public Player(string name, string job)
     {
         Level = 1;
@@ -23,6 +23,7 @@ public class Player
         Inventory = new Inventory();  // 인벤토리 생성
         purchasedItems = new List<Item>();  // 구매한 아이템 목록 초기화
 
+        // 직업에 따른 공격력, 방어력, 체력
         switch (job)
         {
             case "전사":
@@ -51,7 +52,7 @@ public class Player
     // 아이템 인벤토리에 추가
     public void AddItem(Item item)
     {
-        Inventory.AddItem(item);
+        Inventory.AddItem(item);  // 인벤토리에 아이템 추가
         purchasedItems.Add(item);  // 구매한 아이템 목록에 추가
     }
 
@@ -64,6 +65,7 @@ public class Player
     // 캐릭터 상태 출력
     public void ShowStatus()
     {
+        // 인벤토리에서 아이템의 공격력, 방어력 가져오기
         var (attackBonus, defenseBonus) = Inventory.GetEquipmentStats();
 
         Console.Clear();
